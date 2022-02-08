@@ -71,7 +71,7 @@ public class Functions {
 		switch (opcion) {
 		case 1:
 			System.out.println("Aparcar");
-		
+			System.out.println("HOLAMUNDO");
 			//parking(c);
 			break;
 		case 2:
