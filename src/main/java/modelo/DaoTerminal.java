@@ -50,6 +50,7 @@ public class DaoTerminal {
 		boolean usuarioRegistrado = false;
 		try {
 			consulta = conexion.createStatement();
+			//TODO chapuzon buscar cliente por Dni, no iterrar sobre toda l atabla
 			ResultSet resultado = consulta.executeQuery(SQL_COMPROBARCLIETNE);
 			// Recorremos el resultado obtenido
 			// Haremos un bucle mientras queden resultados
@@ -65,7 +66,11 @@ public class DaoTerminal {
 		}
 		return usuarioRegistrado;
 	}
-
+/**
+ * Busca cliente por dni
+ * @param dni es el dni del cliente 
+ * @return cliente con sus datos / si no lo encuentra devuelve null
+ */
 	public Cliente selectClient(String dni) {
 // Recoge la informacion de un usuario que ya este en la base de datos
 		Statement consulta; // Consulta para la info del cliente
@@ -103,7 +108,10 @@ public class DaoTerminal {
 							}
 						}
 					}
+				}else {
+				//	System.out.println("no esta ");
 				}
+					
 			}
 			v.setPotencia(m);
 			c.setV(v);
