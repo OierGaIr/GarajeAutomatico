@@ -4,11 +4,12 @@ import controlador.keyboardControl;
 import vista.Main;
 
 public class Functions {
+
+	
 	public static DaoTerminal conexion = new DaoTerminal();
-	private static Vehiculo[][] garaje = new Vehiculo[10][10];
-	
-	
-	//TODO metodo para tener unos coches parcados
+	public static Vehiculo[][] garaje = new Vehiculo[10][10];
+
+	// TODO metodo para tener unos coches parcados
 	/**
 	 * 
 	 */
@@ -18,19 +19,16 @@ public class Functions {
 		garaje[1][0] = new Vehiculo();
 		garaje[2][2] = new Vehiculo();
 	}
-	
-	
-	
 
 	public static void isRegistered() {
 		Cliente c = new Cliente();
 		System.out.println(" Comprobemos si usted esta registrado: ");
 		System.out.println(" INTRODUZCA SU DNI ");
-		
+
 		// TODO luego kitar
-		// String dni = keyboardControl.isString();
-		String dni = "79067576Q"; 
-				
+		String dni = keyboardControl.isString();
+		//String dni = "79067576Q";
+
 		if (conexion.isRegisted(dni)) {
 			c = conexion.selectClient(dni);
 			System.out.println("\n ---> BIENVENIDO A NUESTRO GARAJE <---");
@@ -86,22 +84,22 @@ public class Functions {
 
 	public static void menu(Cliente c) {
 		Main.showMenu();
+		
 		rellenarGarage();
 		int opcion = keyboardControl.isNumberMenu();
 		switch (opcion) {
 		case 1:
 			System.out.println("Aparcar");
-			System.out.println("HOLAMUNDO");
 			try {
-				aparcar(c);
+				aparcar(garaje,c);
 			} catch (Exception e) {
-				System.out.println( e.getMessage() );
+				System.out.println(e.getMessage());
 				menu(c);
 			}
 			break;
 		case 2:
 			System.out.println("Desaparcar");
-			desaparcar(c);
+			desaparcar(garaje, c);
 			break;
 		case 3:
 			System.out.println("Reparar");
@@ -109,6 +107,8 @@ public class Functions {
 
 		default:
 			System.out.println("Saliendo...");
+			Main.welcome();
+			isRegistered();
 			break;
 		}
 	}
@@ -120,32 +120,44 @@ public class Functions {
 	 * @throws Exception si el coche ya esta aparcado
 	 * @return true si aparca, false si no hay sitio
 	 */
-	public static boolean aparcar(Cliente c) throws Exception {
+	public static void aparcar(Vehiculo[][] garaje, Cliente c) throws Exception {
+		boolean aparcado = false;
+		Vehiculo v = c.getV();
+		int i = 0;
+		int j = 0;
+		if (!estaAparcado(garaje,c)) {
+			while (i < garaje.length && !aparcado) {
+				while (j < garaje[i].length && !aparcado) {
+					if (garaje[i][j] == null) {
+						System.out.println("Aparcado en: " + i + j);
+						garaje[i][j] = v;
+						aparcado = true;
+						}
+				j++;	
+				}
+				i++;
+			}
+		}
+		menu(c);
+
+	}
+
+	public static boolean estaAparcado(Vehiculo[][] garaje,Cliente c) throws Exception {
 		boolean aparcado = false;
 		Vehiculo v = c.getV();
 		int i = 0;
 		int j = 0;
 		while (i < garaje.length && !aparcado) {
 			while (j < garaje[i].length && !aparcado) {
-
 				Vehiculo vActual = garaje[i][j];
 				if (v.equals(vActual)) {
 					throw new Exception("El ya esta aparcado el coche");
-					
-				}
-
-				if (vActual == null) {
-					System.out.println("Aparcado en: " + i + j);
-					garaje[i][j] = v;
-					aparcado = true;
 				}
 				j++;
 			}
 			i++;
 		}
-		menu(c);
 		return aparcado;
-	
 	}
 
 	/**
@@ -153,11 +165,12 @@ public class Functions {
 	 * @param c
 	 * @return
 	 */
-	public static boolean desaparcar(Cliente c) {
+	public static boolean desaparcar(Vehiculo[][] garaje, Cliente c) {
 		boolean desaparcado = false;
 		Vehiculo v = c.getV();
 		int i = 0;
 		int j = 0;
+		
 		while (i < garaje.length && !desaparcado) {
 			while (j < garaje[i].length && !desaparcado) {
 
@@ -176,23 +189,4 @@ public class Functions {
 		return desaparcado;
 	}
 
-	public static void parking(Cliente c) {
-		Vehiculo v = c.getV();
-		int i = 0;
-		int j = 0;
-		boolean aparcado = false;
-		while (i < garaje.length && !aparcado) {
-			while (j < garaje[i].length && !aparcado) {
-				if (garaje[i][j] == null) {
-					System.out.println("Aparcado en: " + i + j);
-					garaje[i][j] = v;
-					aparcado = true;
-				}
-				j++;
-			}
-			i++;
-		}
-		menu(c);
-
-	}
 }

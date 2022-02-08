@@ -3,9 +3,11 @@ package vista;
 import modelo.Functions;
 
 public class Main {
-
+	
+	
 	
 	public static void main(String[] args) {
+		
 		welcome();
 		Functions.isRegistered();
 		
