@@ -8,15 +8,15 @@ public class Functions {
 	private static Vehiculo[][] garaje = new Vehiculo[10][10];
 
 	public static void isRegistered() {
-		Cliente c = new Cliente();
+		//Cliente c = new Cliente();
 		System.out.println(" Comprobemos si usted esta registrado: ");
 		System.out.println(" INTRODUZCA SU DNI ");
 		String dni = keyboardControl.isString();
 		if (conexion.isRegisted(dni)) {
-			c = conexion.selectClient(dni);
+			conexion.selectClient(dni);
 			System.out.println("\n ---> BIENVENIDO A NUESTRO GARAJE <---");
 			System.out.println(" Que va a hacer?");
-			menu(c);
+			//menu(c);
 
 		} else {
 			System.out.println(" Necesita registrarse ");
@@ -71,7 +71,7 @@ public class Functions {
 		switch (opcion) {
 		case 1:
 			System.out.println("Aparcar");
-			parking(c);
+			//parking(c);
 			break;
 		case 2:
 			System.out.println("Desaparcar");
