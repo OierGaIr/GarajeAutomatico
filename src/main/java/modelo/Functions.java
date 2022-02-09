@@ -5,7 +5,6 @@ import vista.Main;
 
 public class Functions {
 
-	
 	public static DaoTerminal conexion = new DaoTerminal();
 	public static Vehiculo[][] garaje = new Vehiculo[10][10];
 
@@ -27,7 +26,7 @@ public class Functions {
 
 		// TODO luego kitar
 		String dni = keyboardControl.isString();
-		//String dni = "79067576Q";
+		// String dni = "79067576Q";
 
 		if (conexion.isRegisted(dni)) {
 			c = conexion.selectClient(dni);
@@ -84,14 +83,14 @@ public class Functions {
 
 	public static void menu(Cliente c) {
 		Main.showMenu();
-		
+
 		rellenarGarage();
 		int opcion = keyboardControl.isNumberMenu();
 		switch (opcion) {
 		case 1:
 			System.out.println("Aparcar");
 			try {
-				aparcar(garaje,c);
+				aparcar(garaje, c);
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 				menu(c);
@@ -117,7 +116,7 @@ public class Functions {
 	 * Aparca el coche del cliente
 	 * 
 	 * @param c Cliente que contiene Coche
-	 * @throws Exception si el coche ya esta aparcado
+	 * 
 	 * @return true si aparca, false si no hay sitio
 	 */
 	public static void aparcar(Vehiculo[][] garaje, Cliente c) throws Exception {
@@ -125,15 +124,15 @@ public class Functions {
 		Vehiculo v = c.getV();
 		int i = 0;
 		int j = 0;
-		if (!estaAparcado(garaje,c)) {
+		if (!estaAparcado(garaje, c)) {
 			while (i < garaje.length && !aparcado) {
 				while (j < garaje[i].length && !aparcado) {
 					if (garaje[i][j] == null) {
 						System.out.println("Aparcado en: " + i + j);
 						garaje[i][j] = v;
 						aparcado = true;
-						}
-				j++;	
+					}
+					j++;
 				}
 				i++;
 			}
@@ -142,7 +141,13 @@ public class Functions {
 
 	}
 
-	public static boolean estaAparcado(Vehiculo[][] garaje,Cliente c) throws Exception {
+	/**
+	 * Comprueba que el coche esta aparcado o no
+	 * 
+	 * @throws Exception si el coche ya esta aparcado
+	 * @return aparcado true si el coche esta en el garaje y false si no lo esta 
+	 */
+	public static boolean estaAparcado(Vehiculo[][] garaje, Cliente c) throws Exception {
 		boolean aparcado = false;
 		Vehiculo v = c.getV();
 		int i = 0;
@@ -150,8 +155,8 @@ public class Functions {
 		String vActual = null;
 		while (i < garaje.length && !aparcado) {
 			while (j < garaje[i].length && !aparcado) {
-				if(garaje[i][j] != null) {
-				 vActual = garaje[i][j].getMatricula();
+				if (garaje[i][j] != null) {
+					vActual = garaje[i][j].getMatricula();
 				} else if (v.getMatricula().equals(vActual)) {
 					throw new Exception("El ya esta aparcado el coche");
 				}
@@ -172,13 +177,10 @@ public class Functions {
 		Vehiculo v = c.getV();
 		int i = 0;
 		int j = 0;
-		
 		while (i < garaje.length && !desaparcado) {
 			while (j < garaje[i].length && !desaparcado) {
-
-				Vehiculo vActual = garaje[i][j];
-
-				if (v.equals(vActual)) {
+				String vActual = garaje[i][j].getMatricula();
+				if (v.getMatricula().equals(vActual)) {
 					System.out.println("Desaparcado en: " + i + j);
 					garaje[i][j] = null;
 					desaparcado = true;
