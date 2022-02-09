@@ -18,8 +18,8 @@ public class FacturaConReparacion extends FacturaSinReparacion {
 
 	@Override
 	public String toString() {
-		return super.toString()+ "FacturaConReparacion [importeRealizado=" + importeRealizado + ", importeAcumulado=" + importeAcumulado
-				+ "]";
+		return super.toString()+ "\nImporte del arreglo = " + importeRealizado + "€"+ "\nImporteAcumulado = " + importeAcumulado
+				+ "€";
 	}
 
 	/**

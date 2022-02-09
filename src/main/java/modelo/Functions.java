@@ -192,9 +192,9 @@ public class Functions {
 						garaje[i][j] = null;
 						desaparcado = true;
 						rellenarFactura(c);
-					} else if (!v.getMatricula().equals(vActual)) {
+					} 
+					} else {
 						throw new Exception("¡ El coche no esta aparcado !");
-					}
 				}
 
 				j++;

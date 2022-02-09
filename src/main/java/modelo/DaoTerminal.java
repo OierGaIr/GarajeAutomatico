@@ -109,7 +109,7 @@ public class DaoTerminal {
 						}
 					}
 				}else {
-				//	System.out.println("no esta ");
+				//System.out.println("no esta ");
 				}
 					
 			}
