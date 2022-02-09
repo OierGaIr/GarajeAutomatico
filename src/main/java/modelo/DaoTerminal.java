@@ -10,9 +10,9 @@ import java.sql.Statement;
 public class DaoTerminal {
 	// CONEXION CON MYSQL
 	private Connection conexion;
-	static final String URL_CONEXION = "jdbc:mysql://localhost:33060/garajeautomatico?useSSL=false";
+	static final String URL_CONEXION = "jdbc:mysql://localhost:3306/garajeautomatico?useSSL=false";
 	static final String USUARIO = "root";
-	static final String PASSWORD = "elorrieta";
+	static final String PASSWORD = "root";
 	static final String FORNAME = "com.mysql.jdbc.Driver";
 
 	public DaoTerminal() {

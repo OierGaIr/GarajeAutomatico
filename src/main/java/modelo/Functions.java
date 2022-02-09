@@ -147,10 +147,12 @@ public class Functions {
 		Vehiculo v = c.getV();
 		int i = 0;
 		int j = 0;
+		String vActual = null;
 		while (i < garaje.length && !aparcado) {
 			while (j < garaje[i].length && !aparcado) {
-				Vehiculo vActual = garaje[i][j];
-				if (v.equals(vActual)) {
+				if(garaje[i][j] != null) {
+				 vActual = garaje[i][j].getMatricula();
+				} else if (v.getMatricula().equals(vActual)) {
 					throw new Exception("El ya esta aparcado el coche");
 				}
 				j++;
