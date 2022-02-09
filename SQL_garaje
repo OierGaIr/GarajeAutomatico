@@ -73,7 +73,7 @@ CREATE TABLE `vehiculo` (
   `Marca` varchar(25) NOT NULL,
   `Modelo` varchar(25) NOT NULL,
   `Matricula` varchar(25) NOT NULL,
-  `ImporteAcumulador` decimal(3,2) NOT NULL
+  `ImporteAcumulador` decimal(5,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --

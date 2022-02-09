@@ -83,12 +83,11 @@ public class Functions {
 
 	public static void menu(Cliente c) {
 		Main.showMenu();
-
 		rellenarGarage();
 		int opcion = keyboardControl.isNumberMenu();
 		switch (opcion) {
 		case 1:
-			System.out.println("Aparcar");
+			//System.out.println("Aparcar");
 			try {
 				aparcar(garaje, c);
 			} catch (Exception e) {
@@ -97,11 +96,17 @@ public class Functions {
 			}
 			break;
 		case 2:
-			System.out.println("Desaparcar");
-			desaparcar(garaje, c);
+			//System.out.println("Desaparcar");
+			try {
+				desaparcar(garaje, c);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				menu(c);
+			}
 			break;
 		case 3:
-			System.out.println("Reparar");
+			//System.out.println("Reparar");
+			comprobarAceite(c);
 			break;
 
 		default:
@@ -138,14 +143,13 @@ public class Functions {
 			}
 		}
 		menu(c);
-
 	}
 
 	/**
 	 * Comprueba que el coche esta aparcado o no
 	 * 
 	 * @throws Exception si el coche ya esta aparcado
-	 * @return aparcado true si el coche esta en el garaje y false si no lo esta 
+	 * @return aparcado true si el coche esta en el garaje y false si no lo esta
 	 */
 	public static boolean estaAparcado(Vehiculo[][] garaje, Cliente c) throws Exception {
 		boolean aparcado = false;
@@ -158,7 +162,7 @@ public class Functions {
 				if (garaje[i][j] != null) {
 					vActual = garaje[i][j].getMatricula();
 				} else if (v.getMatricula().equals(vActual)) {
-					throw new Exception("El ya esta aparcado el coche");
+					throw new Exception("¡ El coche ya esta aparcado !");
 				}
 				j++;
 			}
@@ -168,29 +172,96 @@ public class Functions {
 	}
 
 	/**
+	 * Recorre el array y comprueba que el vehiculo aparcado concuerda con la
+	 * matricula
 	 * 
 	 * @param c
 	 * @return
 	 */
-	public static boolean desaparcar(Vehiculo[][] garaje, Cliente c) {
+	public static boolean desaparcar(Vehiculo[][] garaje, Cliente c) throws Exception {
 		boolean desaparcado = false;
 		Vehiculo v = c.getV();
 		int i = 0;
 		int j = 0;
 		while (i < garaje.length && !desaparcado) {
 			while (j < garaje[i].length && !desaparcado) {
-				String vActual = garaje[i][j].getMatricula();
-				if (v.getMatricula().equals(vActual)) {
-					System.out.println("Desaparcado en: " + i + j);
-					garaje[i][j] = null;
-					desaparcado = true;
+				if (garaje[i][j] != null) {
+					String vActual = garaje[i][j].getMatricula();
+					if (v.getMatricula().equals(vActual)) {
+						System.out.println("Desaparcado en: " + i + j);
+						garaje[i][j] = null;
+						desaparcado = true;
+						rellenarFactura(c);
+					} else if (!v.getMatricula().equals(vActual)) {
+						throw new Exception("¡ El coche no esta aparcado !");
+					}
 				}
+
 				j++;
 			}
 			i++;
 		}
+		rellenarFactura(c);
 		menu(c);
 		return desaparcado;
+	}
+
+	// TODO comprobar Aceite si tiene aceite se pasa a reparar sino se suman 10
+	// litros al vehiculo
+	public static void comprobarAceite(Cliente c) {
+		Vehiculo v = c.getV();
+		Motor m = v.getPotencia();
+		int motorSeco = 0;
+		if (m.getLitrosRestante() == motorSeco) {
+			System.out.println("Su vehiculo no tiene aceite");
+			int botellaAceite = 10;
+			double costeAceite = 150;
+			System.out.println("¡¡ Aceite recargado !!");
+			m.setLitrosRestante(botellaAceite);
+			v.setImporteAveriasAcumulado(costeAceite);
+			reparar(c);
+		} else {
+			System.out.println("Esta full de aceite");
+			reparar(c);
+		}
+	}
+
+	public static void reparar(Cliente c) {
+
+		Vehiculo v = c.getV();
+		System.err.println(" Su vehiculo se esta arreglando... Espere");
+		double arreglo = (v.getImporteAveriasAcumulado()
+				+ Math.round((Math.random() * (400 - 150 + 1) + 150) * 100.0) / 100.0);
+		v.setImporteAveriasAcumulado(v.getImporteAveriasAcumulado() + arreglo);
+		v.setUltimoArreglo(arreglo);
+		System.out.println("Su vehiculo se ha reparado");
+
+		rellenarFactura(c);
+	}
+
+	public static void rellenarFactura(Cliente c) {
+		Vehiculo v = c.getV();
+
+		if (v.getUltimoArreglo() > 0) {
+			FacturaConReparacion fcr = new FacturaConReparacion();
+			fcr.setMatricula(v.getMatricula());
+			fcr.setNombre(c.getNombre());
+			fcr.setImporteEstancia(140);
+			fcr.setImporteRealizado(v.getUltimoArreglo());
+			fcr.setImporteAcumulado(v.getUltimoArreglo() + 140);
+			System.out.println("FACTURA DE LA REPARACION");
+			System.out.println(fcr.toString());
+		} else {
+			FacturaSinReparacion fsr = new FacturaSinReparacion();
+			fsr.setMatricula(v.getMatricula());
+			fsr.setNombre(c.getNombre());
+			fsr.setImporteEstancia(140);
+			System.out.println("FACTURA DE LA REPARACION");
+			System.out.println(fsr.toString());
+		}
+
+		menu(c);
+
 	}
 
 }
