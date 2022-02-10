@@ -4,8 +4,8 @@ public class Vehiculo {
 	private String marca;
 	private String modelo;
 	private String matricula;
-	private double ultimoArreglo;
 	private boolean cobrar;
+	private double ultimoArreglo;
 	private double importeAveriasAcumulado; 
 	private Motor potencia;
 	

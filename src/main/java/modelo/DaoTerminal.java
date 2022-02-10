@@ -10,9 +10,9 @@ import java.sql.Statement;
 public class DaoTerminal {
 	// CONEXION CON MYSQL
 	private Connection conexion;
-	static final String URL_CONEXION = "jdbc:mysql://localhost:33060/garajeautomatico?useSSL=false";
+	static final String URL_CONEXION = "jdbc:mysql://localhost:3306/garajeautomatico?useSSL=false";
 	static final String USUARIO = "root";
-	static final String PASSWORD = "elorrieta";
+	static final String PASSWORD = "root";
 	static final String FORNAME = "com.mysql.jdbc.Driver";
 
 	public DaoTerminal() {
@@ -40,6 +40,10 @@ public class DaoTerminal {
 	public final String SQL_INSERTCLIENTE = "INSERT INTO cliente VALUES (?,?,?)";
 	public final String SQL_INSERTVEHICULO = "INSERT INTO vehiculo VALUES(?,?,?,0)";
 	public final String SQL_INSERTMOTOR = "INSERT INTO motor VALUES (?,?,?)";
+	public final String SQL_UPDATECLIENTE = "UPDATE cliente SET DNI=?, Nombre = ?, Matricula = ? WHERE Matricula = ?";
+	public final String SQL_UPDATEVEHICULO = "UPDATE vehiculo SET Marca = ?, Modelo = ?, Matricula = ? , ImporteAcumulador= ? WHERE Matricula = ?";
+	public final String SQL_UPDATEMOTOR = "UPDATE motor SET matricula = ?, LitrosAceite = ? , Caballos = ? WHERE matricula = ?";
+
 
 	// QUERYS CONSULTAS
 
@@ -144,7 +148,6 @@ public class DaoTerminal {
 			ps2.setString(3, v.getMatricula());
 			// el metodo para insertar se llama executeUpdate
 			ps2.executeUpdate();
-			System.out.println("Cliente insertado correctamente");
 // INSERTAR MOTOR DEL VEHICULO
 			PreparedStatement ps3 = conexion.prepareStatement(SQL_INSERTMOTOR);
 			ps3.setString(1, v.getMatricula());
@@ -152,12 +155,54 @@ public class DaoTerminal {
 			ps3.setInt(3, m.getCaballos());
 			// el metodo para insertar se llama executeUpdate
 			ps3.executeUpdate();
-
+			System.out.println("Cliente insertado correctamente");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println(
 					"No se ha podido insertar el Cliente (PUEDE SER QUE EL DNI YA EST� EN NUESTRA BASE DE DATOS)");
 		}
+	}
+
+	public void updateCliente(Cliente c) {
+		Vehiculo v = c.getV();
+		Motor m = v.getPotencia();
+		
+		// usuario (DNI_NIE, nombre, apellidos, contrase�a)
+				// Esta funcion sirve para insertar un usuario en la base de datos
+				try {
+		// UPDATE CLIENTE
+					PreparedStatement ps = conexion.prepareStatement(SQL_UPDATECLIENTE);
+					ps.setString(1, c.getDni());
+					ps.setString(2, c.getNombre());
+					ps.setString(3, c.getV().getMatricula());
+					ps.setString(4, c.getV().getMatricula());
+					// el metodo para insertar se llama executeUpdate
+					ps.executeUpdate();
+		// UPDATE VEHICULO DEL CLIENTE
+					PreparedStatement ps2 = conexion.prepareStatement(SQL_UPDATEVEHICULO);
+					ps2.setString(1, v.getMarca());
+					ps2.setString(2, v.getModelo());
+					ps2.setString(3, v.getMatricula());
+					ps2.setDouble(4, v.getImporteAveriasAcumulado());
+					ps2.setString(5, v.getMatricula());
+					// el metodo para insertar se llama executeUpdate
+					ps2.executeUpdate();
+					
+		// UPDATE MOTOR DEL VEHICULO
+					PreparedStatement ps3 = conexion.prepareStatement(SQL_UPDATEMOTOR);
+					ps3.setString(1, v.getMatricula());
+					ps3.setInt(2, m.getLitrosRestante());
+					ps3.setInt(3, m.getCaballos());
+					ps3.setString(4, v.getMatricula());
+					// el metodo para insertar se llama executeUpdate
+					ps3.executeUpdate();
+					System.out.println("Su informacion en la base de datos ha sido actualizada");
+				} catch (SQLException e) {
+					e.printStackTrace();
+					System.err.println(
+							"No se ha podido actualizar el Cliente ");
+				}
+		
 	}
 
 }

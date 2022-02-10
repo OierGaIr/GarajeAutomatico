@@ -7,6 +7,13 @@ public class Functions {
 
 	public static DaoTerminal conexion = new DaoTerminal();
 	public static Vehiculo[][] garaje = new Vehiculo[10][10];
+	
+	private static final int PRECIO_ESTANCIA_DIA = 140;
+	
+	private static final int MENU_APARCAR = 1;
+	private static final int MENU_DESAPARCAR = 2;
+	private static final int MENU_REPARAR = 3;
+
 
 	// TODO metodo para tener unos coches parcados
 	/**
@@ -86,34 +93,38 @@ public class Functions {
 		rellenarGarage();
 		int opcion = keyboardControl.isNumberMenu();
 		switch (opcion) {
-		case 1:
-			//System.out.println("Aparcar");
-			try {
-				aparcar(garaje, c);
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
+			case MENU_APARCAR:
+				try {
+					aparcar(garaje, c);
+					
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+					
+				}
 				menu(c);
-			}
-			break;
-		case 2:
-			//System.out.println("Desaparcar");
-			try {
-				desaparcar(garaje, c);
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				break;
+			case MENU_DESAPARCAR:
+				try {
+					desaparcar(garaje, c);
+					
+				} catch (Exception e) {
+					System.out.println(e.getMessage());	
+				}
+				rellenarFactura(c);
 				menu(c);
-			}
-			break;
-		case 3:
-			//System.out.println("Reparar");
-			comprobarAceite(c);
-			break;
-
-		default:
-			System.out.println("Saliendo...");
-			Main.welcome();
-			isRegistered();
-			break;
+				break;
+			case MENU_REPARAR:
+				comprobarAceite(c);
+				reparar(c);
+				rellenarFactura(c);
+				menu(c);
+				break;
+	
+			default:
+				System.out.println("Saliendo...");
+				Main.welcome();
+				isRegistered();
+				break;
 		}
 	}
 
@@ -141,8 +152,7 @@ public class Functions {
 				}
 				i++;
 			}
-		}
-		menu(c);
+		}	
 	}
 
 	/**
@@ -201,8 +211,7 @@ public class Functions {
 			}
 			i++;
 		}
-		rellenarFactura(c);
-		menu(c);
+		
 		return desaparcado;
 	}
 
@@ -218,25 +227,25 @@ public class Functions {
 			double costeAceite = 150;
 			System.out.println("¡¡ Aceite recargado !!");
 			m.setLitrosRestante(botellaAceite);
-			v.setImporteAveriasAcumulado(costeAceite);
-			reparar(c);
+			v.setUltimoArreglo(costeAceite);
+			 	
 		} else {
-			System.out.println("Esta full de aceite");
-			reparar(c);
+			System.out.println("Esta full de aceite");		
 		}
+	
 	}
 
 	public static void reparar(Cliente c) {
 
 		Vehiculo v = c.getV();
 		System.err.println(" Su vehiculo se esta arreglando... Espere");
-		double arreglo = (v.getImporteAveriasAcumulado()
-				+ Math.round((Math.random() * (400 - 150 + 1) + 150) * 100.0) / 100.0);
-		v.setImporteAveriasAcumulado(v.getImporteAveriasAcumulado() + arreglo);
-		v.setUltimoArreglo(arreglo);
-		System.out.println("Su vehiculo se ha reparado");
-
-		rellenarFactura(c);
+		
+		double ultimoArreglo = v.getUltimoArreglo(); 
+		double arregloRandom = ( Math.round((Math.random() * (400 - 150 + 1) + 150) * 100.0) / 100.0);
+		v.setImporteAveriasAcumulado( v.getImporteAveriasAcumulado()  + ultimoArreglo + arregloRandom);
+		v.setUltimoArreglo(ultimoArreglo + arregloRandom);
+		System.out.println("Su vehiculo se ha reparado");	
+		
 	}
 
 	public static void rellenarFactura(Cliente c) {
@@ -246,21 +255,21 @@ public class Functions {
 			FacturaConReparacion fcr = new FacturaConReparacion();
 			fcr.setMatricula(v.getMatricula());
 			fcr.setNombre(c.getNombre());
-			fcr.setImporteEstancia(140);
+			fcr.setImporteEstancia(PRECIO_ESTANCIA_DIA);
 			fcr.setImporteRealizado(v.getUltimoArreglo());
-			fcr.setImporteAcumulado(v.getUltimoArreglo() + 140);
+			fcr.setImporteAcumulado(v.getUltimoArreglo() + PRECIO_ESTANCIA_DIA);
 			System.out.println("FACTURA DE LA REPARACION");
 			System.out.println(fcr.toString());
 		} else {
 			FacturaSinReparacion fsr = new FacturaSinReparacion();
 			fsr.setMatricula(v.getMatricula());
 			fsr.setNombre(c.getNombre());
-			fsr.setImporteEstancia(140);
+			fsr.setImporteEstancia(PRECIO_ESTANCIA_DIA);
 			System.out.println("FACTURA DE LA REPARACION");
 			System.out.println(fsr.toString());
 		}
-
-		menu(c);
+		conexion.updateCliente(c);
+		
 
 	}
 
