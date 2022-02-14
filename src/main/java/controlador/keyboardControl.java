@@ -2,38 +2,42 @@ package controlador;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class keyboardControl {
 
 	public static String isString() {
 		Scanner sc = new Scanner(System.in);
-		String dni = null;
+		String String = null;
 		try {
-			dni =  sc.next();
+			String = sc.next();
 		} catch (Exception e) {
 			System.out.println("No has introducido una campo valido");
 			isString();
 		}
-		return dni;
+		return String;
 	}
+
 	public static int isNumber() {
 		// Comprueba que lo que mete por teclado es un numero
 		Scanner sc = new Scanner(System.in);
 		boolean isNumber = true;
 		int numero = 0;
-		
-			try {
-				numero = sc.nextInt();
-				isNumber = false;
-			} catch (Exception e) {
-				System.out.println("Su seleccion no se corresponde a lo que se le ha pedido");
-				System.out.println();
+
+		try {
+			numero = sc.nextInt();
+			isNumber = false;
+		} catch (Exception e) {
+			System.out.println("Su seleccion no se corresponde a lo que se le ha pedido");
+			System.out.println();
 //				esNumero();
-			}
-			return numero;
+		}
+		return numero;
 	}
+
 	public static int isNumberMenu() {
-		// COMPROBAR NUMERO MENÚ
+		// COMPROBAR NUMERO MENï¿½
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Introduce la opcion deseada");
 		int opcion = 0;
@@ -50,5 +54,20 @@ public class keyboardControl {
 			opcion = isNumberMenu();
 		}
 		return opcion;
+	}
+
+	public static String isDni() {
+		Scanner sc = new Scanner(System.in);
+		Pattern pat = Pattern.compile("[0-9]{7,8}[A-Z a-z]");
+		String dni = sc.nextLine();
+		Matcher mat = pat.matcher(dni);
+			while (!mat.matches()) {
+				System.out.println("El DNI introducido es incorrecto, por favor introduzca un DNI vÃ¡lido.");
+				System.out.print("Introduce un DNI correcto: ");
+				dni = sc.nextLine();
+				mat = pat.matcher(dni);
+		}
+		return dni;
+
 	}
 }

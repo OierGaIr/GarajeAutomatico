@@ -7,13 +7,12 @@ public class Functions {
 
 	public static DaoTerminal conexion = new DaoTerminal();
 	public static Vehiculo[][] garaje = new Vehiculo[10][10];
-	
+
 	private static final int PRECIO_ESTANCIA_DIA = 140;
-	
+
 	private static final int MENU_APARCAR = 1;
 	private static final int MENU_DESAPARCAR = 2;
 	private static final int MENU_REPARAR = 3;
-
 
 	// TODO metodo para tener unos coches parcados
 	/**
@@ -32,7 +31,7 @@ public class Functions {
 		System.out.println(" INTRODUZCA SU DNI ");
 
 		// TODO luego kitar
-		String dni = keyboardControl.isString();
+		String dni = keyboardControl.isDni();
 		// String dni = "79067576Q";
 
 		if (conexion.isRegisted(dni)) {
@@ -55,7 +54,7 @@ public class Functions {
 		Motor m = new Motor();
 		// coger el dni
 		System.out.println(" Tu Dni:");
-		String dni = keyboardControl.isString();
+		String dni = keyboardControl.isDni();
 		c.setDni(dni);
 		// coger el nombre
 		System.out.println(" Tu nombre:");
@@ -93,38 +92,38 @@ public class Functions {
 		rellenarGarage();
 		int opcion = keyboardControl.isNumberMenu();
 		switch (opcion) {
-			case MENU_APARCAR:
-				try {
-					aparcar(garaje, c);
-					
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
-					
-				}
-				menu(c);
-				break;
-			case MENU_DESAPARCAR:
-				try {
-					desaparcar(garaje, c);
-					
-				} catch (Exception e) {
-					System.out.println(e.getMessage());	
-				}
-				rellenarFactura(c);
-				menu(c);
-				break;
-			case MENU_REPARAR:
-				comprobarAceite(c);
-				reparar(c);
-				rellenarFactura(c);
-				menu(c);
-				break;
-	
-			default:
-				System.out.println("Saliendo...");
-				Main.welcome();
-				isRegistered();
-				break;
+		case MENU_APARCAR:
+			try {
+				aparcar(garaje, c);
+
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+
+			}
+			menu(c);
+			break;
+		case MENU_DESAPARCAR:
+			try {
+				desaparcar(garaje, c);
+
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+			rellenarFactura(c);
+			menu(c);
+			break;
+		case MENU_REPARAR:
+			comprobarAceite(c);
+			reparar(c);
+			rellenarFactura(c);
+			menu(c);
+			break;
+
+		default:
+			System.out.println("Saliendo...");
+			Main.welcome();
+			isRegistered();
+			break;
 		}
 	}
 
@@ -152,7 +151,7 @@ public class Functions {
 				}
 				i++;
 			}
-		}	
+		}
 	}
 
 	/**
@@ -202,16 +201,16 @@ public class Functions {
 						garaje[i][j] = null;
 						desaparcado = true;
 						rellenarFactura(c);
-					} 
-					} else {
-						throw new Exception("¡ El coche no esta aparcado !");
+					}
+				} else {
+					throw new Exception("¡ El coche no esta aparcado !");
 				}
 
 				j++;
 			}
 			i++;
 		}
-		
+
 		return desaparcado;
 	}
 
@@ -228,24 +227,24 @@ public class Functions {
 			System.out.println("¡¡ Aceite recargado !!");
 			m.setLitrosRestante(botellaAceite);
 			v.setUltimoArreglo(costeAceite);
-			 	
+
 		} else {
-			System.out.println("Esta full de aceite");		
+			System.out.println("Esta full de aceite");
 		}
-	
+
 	}
 
 	public static void reparar(Cliente c) {
 
 		Vehiculo v = c.getV();
 		System.err.println(" Su vehiculo se esta arreglando... Espere");
-		
-		double ultimoArreglo = v.getUltimoArreglo(); 
-		double arregloRandom = ( Math.round((Math.random() * (400 - 150 + 1) + 150) * 100.0) / 100.0);
-		v.setImporteAveriasAcumulado( v.getImporteAveriasAcumulado()  + ultimoArreglo + arregloRandom);
+
+		double ultimoArreglo = v.getUltimoArreglo();
+		double arregloRandom = (Math.round((Math.random() * (400 - 150 + 1) + 150) * 100.0) / 100.0);
+		v.setImporteAveriasAcumulado(v.getImporteAveriasAcumulado() + ultimoArreglo + arregloRandom);
 		v.setUltimoArreglo(ultimoArreglo + arregloRandom);
-		System.out.println("Su vehiculo se ha reparado");	
-		
+		System.out.println("Su vehiculo se ha reparado");
+
 	}
 
 	public static void rellenarFactura(Cliente c) {
@@ -269,7 +268,6 @@ public class Functions {
 			System.out.println(fsr.toString());
 		}
 		conexion.updateCliente(c);
-		
 
 	}
 
